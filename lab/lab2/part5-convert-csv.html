@@ -39,6 +39,16 @@
 
       console.log(healthCentersCSV)
 
+      var data = healthCentersCSV
+      var dataArray = data.split(";")
+
+      console.log(dataArray)
+
+      for (var i=0; i<dataArray.length; i++) {
+        var csvRow = dataArray[i].split(",");
+        console.log(csvRow);
+      };
+      
       /* =====================
 
       End code

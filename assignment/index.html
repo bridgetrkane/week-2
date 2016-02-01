@@ -1,78 +1,116 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!--stylesheet imports-->
-    <link rel="stylesheet" href="leaflet.css" />
-  </head>
-  <body>
-    <!--left panel-->
-    <div style="position:fixed;left:0px;width:400px">
-    </div>
-    <!--map-->
-    <div id="map" style="position:fixed;right:0px;left:400px;height:100%;">
-    </div>
+<head>
+  <!--stylesheet imports-->
+  <link rel="stylesheet" href="leaflet.css" />
+</head>
+<body>
+  <!--left panel-->
+  <div style="position:fixed;left:0px;width:400px">
+  </div>
+  <!--map-->
+  <div id="map" style="position:fixed;right:0px;left:400px;height:100%;">
+  </div>
 
-    <!--javascript imports-->
-    <script src="leaflet.js"></script>
-    <script src="underscore.js"></script>
-    <script src="health_centers.js"></script>
+  <!--javascript imports-->
+  <script src="leaflet.js"></script>
+  <script src="underscore.js"></script>
+  <script src="health_centers.js"></script>
 
-    <!--Your code starts here-->
-    <script>
-      var map = L.map('map', {
-        center: [39.9522, -75.1639],
-        zoom: 14
-      });
-      var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', {
-	      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      	subdomains: 'abcd',
-      	minZoom: 0,
-      	maxZoom: 20,
-      	ext: 'png'
-      }).addTo(map);
-    </script>
-    <script>
-      /* =====================
+  <!--Your code starts here-->
+  <script>
+  var map = L.map('map', {
+    center: [39.9522, -75.1639],
+    zoom: 14
+  });
+  var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', {
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    subdomains: 'abcd',
+    minZoom: 0,
+    maxZoom: 20,
+    ext: 'png'
+  }).addTo(map);
+  </script>
+  <script>
+  /* =====================
 
-      # Week 2 - Assignment
+  # Week 2 - Assignment
 
-      ## Introduction
+  ## Introduction
 
-       This week's assignment as having two separate parts:
+  This week's assignment as having two separate parts:
 
-       1. Log a series of arrays to the console that represents the health_centers dataset in CSV form. For example, [{'first': 1, 'second': 44}, {'first': 2, 'second': 12}] becomes [['first','second'],[1, 44],[2, 12]]
+  1. Log a series of arrays to the console that represents the health_centers dataset in CSV form. For example, [{'first': 1, 'second': 44}, {'first': 2, 'second': 12}] becomes [['first','second'],[1, 44],[2, 12]]
 
-       2. Put a marker on the map for each health center in the specified zip codes with a popup (a simple text dialog) that shows that location's name when its marker is clicked.
+  2. Put a marker on the map for each health center in the specified zip codes with a popup (a simple text dialog) that shows that location's name when its marker is clicked.
 
-          You should create an options object (cf: http://leafletjs.com/reference.html#marker) to specify that we want our marker to be draggable.
+  You should create an options object (cf: http://leafletjs.com/reference.html#marker) to specify that we want our marker to be draggable.
 
-       EXTRA: Some of these locations offer dental services as well. Can you find some way to give dental locations a different icon? (Here's some relevant documentation: http://leafletjs.com/reference.html#icon)
+  EXTRA: Some of these locations offer dental services as well. Can you find some way to give dental locations a different icon? (Here's some relevant documentation: http://leafletjs.com/reference.html#icon)
 
-       Remember: functions are meant to facilitate code comprehension and reuse.
-      ===================== */
-
-
-      /* =====================
-
-      Start code
-
-      ===================== */
-
-      var jsonToCsv = function(json) { console.log(json); };
+  Remember: functions are meant to facilitate code comprehension and reuse.
+  ===================== */
 
 
-      var addMarkers = function(map) {};
+  /* =====================
 
-      /* =====================
+  Start code
 
-      End code
-
-      ===================== */
+  ===================== */
 
 
-      jsonToCsv(healthCenters);
-      addMarkers(map);
-    </script>
-    <!--Your code ends here-->
-  </body>
+  var HCs = L.icon({
+    iconUrl: "https://cdn1.iconfinder.com/data/icons/healthcare-and-medicine-simplicity/512/adhesive_bandage-512.png",
+    iconSize: [25, 30],
+  });
+
+  var Tooth = L.icon({
+    iconUrl: "https://cdn0.iconfinder.com/data/icons/dental/78/Dental_icons-14-128.png",
+    iconSize: [27, 27],
+  });
+
+  var hcArray = function (input) {
+    var hcKeys = Object.keys(input[0])
+    hcValues.push(hcKeys)
+    for (each in input) {
+      var smallList = []
+      for (key in hcKeys) {
+        smallList.push(input[each][hcKeys[key]])
+      }
+      hcValues.push(smallList)
+    }
+  };
+
+  var dentalLocation = function (string) {
+    if (string !== "N/A") {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  var addMarkers = function(map) {
+    for(var i=1; i<hcValues.length; i++) {
+      if(dentalLocation(hcValues[i][8])) {
+        L.marker([hcValues[i][1],hcValues[i][0]],{icon:Tooth, draggable:true}).addTo(map).bindPopup(hcValues[i][3]);
+      }
+      else {
+        L.marker([hcValues[i][1],hcValues[i][0]],{icon:HCs, draggable:true}).addTo(map).bindPopup(hcValues[i][3]);
+      };
+    };
+  };
+
+  /* =====================
+
+  End code
+
+  ===================== */
+
+  var hcValues = [];
+  hcArray(healthCenters);
+  addMarkers(map);
+  </script>
+  <!--Your code ends here-->
+</body>
 </html>
